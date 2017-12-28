@@ -1,4 +1,8 @@
-import React from 'react';
+/* @flow */
+
+import * as React from 'react';
+import _ from 'lodash';
+
 import { Animated, StyleSheet } from 'react-native';
 import createPointerEventsContainer from './PointerEventsContainer';
 
@@ -7,10 +11,14 @@ import createPointerEventsContainer from './PointerEventsContainer';
  */
 class Card extends React.Component {
   render() {
-    const { children, pointerEvents, style } = this.props;
+    const { children, pointerEvents, style, scene } = this.props;
+    const isTopScreen = scene.isActive;
+    const modals = this.props.modals;
+    const isAccessible = (isTopScreen) && (_.size(modals) === 0 || modals === undefined);
     return (
       <Animated.View
         pointerEvents={pointerEvents}
+        importantForAccessibility={isAccessible ? 'yes' : 'no-hide-descendants'}
         ref={this.props.onComponentRef}
         style={[styles.main, style]}
       >
@@ -22,7 +30,6 @@ class Card extends React.Component {
 
 const styles = StyleSheet.create({
   main: {
-    backgroundColor: '#EFEFF4',
     bottom: 0,
     left: 0,
     position: 'absolute',
