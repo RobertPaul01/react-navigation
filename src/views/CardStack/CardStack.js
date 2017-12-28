@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import Card from './Card';
-import Header from '../Header/Header';
 import NavigationActions from '../../NavigationActions';
 import addNavigationHelpers from '../../addNavigationHelpers';
 import getChildEventSubscriber from '../../getChildEventSubscriber';
@@ -410,7 +409,7 @@ class CardStack extends React.Component {
     ];
 
     return (
-      <View {...handlers} style={containerStyle}>
+      <View style={containerStyle}>
         <View style={styles.scenes}>
           {scenes.map(s => this._renderCard(s))}
         </View>
@@ -453,25 +452,25 @@ class CardStack extends React.Component {
         <View style={styles.container}>
           <View style={{ flex: 1 }}>
             <SceneView
-              screenProps={screenProps}
-              navigation={navigation}
+              {...route}
+              key={scene.key}
+              routeKey={route.key}
+              routeProps={scene.route}
               component={SceneComponent}
+              scene={scene}
+              handleNavigate={this.props.handleNavigate}
+              handleBack={this.props.handleBackAction}
+              trackingActions={this.props.trackingActions}
+              hasModal={this.props.hasModal}
+              isLeftSplitPaneComponent
             />
           </View>
-          {this._renderHeader(scene, headerMode)}
         </View>
-      );
-    }
-    return (
-      <SceneView
-        screenProps={this.props.screenProps}
-        navigation={navigation}
-        component={SceneComponent}
-      />
+      </View>
     );
   }
 
-  _getTransitionConfig = () => {
+  _getTransitionConfig = (isAnimateFromBottom) => {
     const isModal = this.props.mode === 'modal';
 
     return TransitionConfigs.getTransitionConfig(
