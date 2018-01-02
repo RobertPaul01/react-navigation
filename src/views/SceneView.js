@@ -12,23 +12,8 @@ export default class SceneView extends React.PureComponent {
     };
   }
 
-
   render() {
-    const { routeProps, component: Component, scene } = this.props;
-    const isActiveRoute = scene.isActive && !this.props.hasModal;
-    return (
-      <Component
-        {...routeProps}
-        key={scene.key}
-
-        // routeKey used for ScreenFocusAware
-        routeKey={scene.route.key}
-        handleNavigate={this.props.handleNavigate}
-        trackPage={data => this._trackState(scene.route, data)}
-        handleBack={this.props.handleBackAction}
-        isActiveRoute={isActiveRoute}
-        isTopScreen={scene.isActive}
-        />
-    )
+    const { screenProps, navigation, component: Component } = this.props;
+    return <Component screenProps={screenProps} navigation={navigation} />;
   }
 }

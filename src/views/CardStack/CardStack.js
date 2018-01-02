@@ -451,7 +451,7 @@ class CardStack extends React.Component {
       return (
         <View style={styles.container}>
           <View style={{ flex: 1 }}>
-            <SceneView
+            <CardSceneView
               {...route}
               key={scene.key}
               routeKey={route.key}
