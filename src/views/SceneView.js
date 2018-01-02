@@ -8,46 +8,24 @@ import type {
 } from '../TypeDefinition';
 
 type Props = {
-  /*
-   * Props passed in by route to given screen, can be anything (ideally in
-   * future we namespace this)
-   */
-  routeProps?: {},
+  screenProps?: {},
+  navigation: NavigationScreenProp<any>,
   component: NavigationComponent,
 };
 
 export default class SceneView extends React.PureComponent<Props> {
+  static childContextTypes = {
+    navigation: propTypes.object.isRequired,
+  };
 
-  constructor(props: DFSCardNavigatorProps) {
-    super(props);
-    (this: any)._trackState = this._trackState.bind(this);
+  getChildContext() {
+    return {
+      navigation: this.props.navigation,
+    };
   }
-
-  _trackState(route, data) {
-    if (!route.trackingPageName) {
-      console.warn(`Attribute \`trackingPageName\` not defined in routes for ${route.routeName}`);
-    } else {
-      this.props.trackingActions.trackState(route.trackingPageName, data);
-    }
-  }
-
 
   render() {
-    const { routeProps, component: Component, scene } = this.props;
-    const isActiveRoute = scene.isActive && !this.props.hasModal;
-    return (
-      <Component
-        {...routeProps}
-        key={scene.key}
-
-        // routeKey used for ScreenFocusAware
-        routeKey={scene.route.key}
-        handleNavigate={this.props.handleNavigate}
-        trackPage={data => this._trackState(scene.route, data)}
-        handleBack={this.props.handleBackAction}
-        isActiveRoute={isActiveRoute}
-        isTopScreen={scene.isActive}
-        />
-    )
+    const { screenProps, navigation, component: Component } = this.props;
+    return <Component screenProps={screenProps} navigation={navigation} />;
   }
 }
