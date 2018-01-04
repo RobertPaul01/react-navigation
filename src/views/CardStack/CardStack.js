@@ -180,7 +180,6 @@ class CardStack extends React.Component<Props, State> {
               handleBack={this.props.handleBackAction}
               trackingActions={this.props.trackingActions}
               hasModal={this.props.hasModal}
-              isLeftSplitPaneComponent
             />
           </View>
         </View>
