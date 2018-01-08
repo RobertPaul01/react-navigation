@@ -30,6 +30,7 @@ class CardStackTransitioner extends React.Component {
       animation = () => ({
         timing: Animated.timing,
         duration: 0,
+        useNativeDriver: true,
       });
     }
 
