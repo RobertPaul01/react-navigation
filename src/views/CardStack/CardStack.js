@@ -422,7 +422,7 @@ class CardStack extends React.Component {
     if (this.props.headerMode) {
       return this.props.headerMode;
     }
-    if (Platform.OS === 'android' || this.props.mode === 'modal') {
+    if (this.props.mode === 'modal') {
       return 'screen';
     }
     return 'float';
