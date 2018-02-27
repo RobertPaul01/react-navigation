@@ -19,7 +19,9 @@
     "test-update-snapshot": "jest --updateSnapshot",
     "lint": "eslint .",
     "format": "eslint --fix .",
-    "precommit": "lint-staged"
+    "flow": "flow",
+    "flow-check": "flow check --show-all-errors",
+    "prepublish": "npm run clean && npm run build"
   },
   "files": [
     "src"
