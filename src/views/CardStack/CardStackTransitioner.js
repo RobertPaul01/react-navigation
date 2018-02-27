@@ -14,10 +14,15 @@ class CardStackTransitioner extends React.Component {
     mode: 'card',
   };
 
+  state = {
+    isFlipFrom: false,
+    isFlipTo: false,
+  };
+
   render() {
     const routes = this.props.navigation.state.routes;
-    const currentScene = routes[routes.length - 1] || {};
-    const previousScene = routes[routes.length - 2] || {};
+    const currentScene = _.last(routes);
+    const previousScene = _.last(routes.slice(0, -1));
     const splitPaneToSplitPaneNav =
       this.props.isMultiPaneEligible &&
       currentScene.leftSplitPaneComponent &&
@@ -38,6 +43,25 @@ class CardStackTransitioner extends React.Component {
         render={this._render}
         onTransitionStart={this.props.onTransitionStart}
         onTransitionEnd={this.props.onTransitionEnd}
+        onFlipStart={() => {
+          this.setState({
+            isFlipFrom: true,
+            isFlipTo: false,
+          });
+        }}
+        onFlipFromComplete={() => {
+          this.setState({
+            isFlipFrom: false,
+            isFlipTo: true,
+          });
+        }}
+        onFlipToComplete={() => {
+          this.setState({
+            isFlipFrom: false,
+            isFlipTo: false,
+          });
+        }}
+        isFlipTransition={isFlipTransition(currentScene)}
       />
     );
   }
@@ -79,6 +103,8 @@ class CardStackTransitioner extends React.Component {
       cardStyle,
       transitionConfig,
     } = this.props;
+
+    const currentScene = _.last(this.props.navigation.state.routes);
     return (
       <CardStack
         screenProps={screenProps}
