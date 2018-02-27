@@ -469,7 +469,7 @@ class CardStack extends React.Component {
     );
   }
 
-  _getTransitionConfig = (isAnimateFromBottom) => {
+  _getTransitionConfig = isAnimateFromBottom => {
     const isModal = this.props.mode === 'modal';
 
     return TransitionConfigs.getTransitionConfig(

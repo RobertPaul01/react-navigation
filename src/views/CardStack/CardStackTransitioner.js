@@ -18,8 +18,10 @@ class CardStackTransitioner extends React.Component {
     const routes = this.props.navigation.state.routes;
     const currentScene = routes[routes.length - 1] || {};
     const previousScene = routes[routes.length - 2] || {};
-    const splitPaneToSplitPaneNav = this.props.isMultiPaneEligible
-      && currentScene.leftSplitPaneComponent && previousScene.leftSplitPaneComponent;
+    const splitPaneToSplitPaneNav =
+      this.props.isMultiPaneEligible &&
+      currentScene.leftSplitPaneComponent &&
+      previousScene.leftSplitPaneComponent;
     let animation = this._configureTransition;
     if (splitPaneToSplitPaneNav) {
       animation = () => ({
