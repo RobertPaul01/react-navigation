@@ -500,7 +500,7 @@ class CardStack extends React.Component {
     );
   }
 
-  _getTransitionConfig = isAnimateFromBottom => {
+  _getTransitionConfig = (isAnimateFromBottom, isFlipTransition) => {
     const isModal = this.props.mode === 'modal';
 
     return TransitionConfigs.getTransitionConfig(
@@ -528,7 +528,7 @@ class CardStack extends React.Component {
         {...props}
         {...transitionProps}
         key={`card_${scene.key}`}
-        style={[style, this.props.cardStyle]}
+        style={[this.props.cardStyle, individualCardAnimation]}
         scene={scene}
       >
         {this._renderInnerScene(SceneComponent, scene)}
