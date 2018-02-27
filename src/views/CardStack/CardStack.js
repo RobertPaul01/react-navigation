@@ -63,14 +63,14 @@ class CardStack extends React.Component<Props, State> {
     (this: any)._hasSplitPaneComponent = this._hasSplitPaneComponent.bind(this);
   }
 
-  componentWillReceiveProps(props: Props, nextProps: Props) {
-    if (props.statusBarSize !== this.props.statusBarSize) {
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.statusBarSize !== this.props.statusBarSize) {
       this.setState({
         headerHeight: (this.props.isIOS ? 45 : 41) + this.props.statusBarSize,
       });
     }
 
-    props.scenes.forEach((newScene: *) => {
+    nextProps.scenes.forEach((newScene: *) => {
       if (
         this._screenDetails[newScene.key] &&
         this._screenDetails[newScene.key].state !== newScene.route
