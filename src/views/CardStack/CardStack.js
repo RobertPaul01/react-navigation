@@ -264,7 +264,6 @@ class CardStack extends React.Component {
       isFlipTransition,
       isFlipFrom,
       isFlipTo,
-      isTransitioning,
     } = this.props;
 
     const {
