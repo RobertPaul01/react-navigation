@@ -1,4 +1,7 @@
-import React from 'react';
+/* @flow */
+
+import * as React from 'react';
+import _ from 'lodash';
 
 import clamp from 'clamp';
 import {
@@ -120,26 +123,63 @@ class CardStack extends React.Component<Props, State> {
   render() {
     let floatingHeader = null;
     const headerMode = this._getHeaderMode();
+
+    const {
+      scene,
+      scenes,
+      position,
+      isFlipTransition,
+      isFlipFrom,
+      isFlipTo,
+      isTransitioning,
+    } = this.props;
+
+    const {
+      topVisibleScene,
+      isHideTopScene,
+      nonPurgedScenes,
+    } = processFlipAnimation(
+      scene,
+      scenes,
+      isFlipTransition,
+      isFlipFrom,
+      isFlipTo
+    );
+
     if (headerMode === 'float') {
-      floatingHeader = this._renderHeader(
-        this.props.transitionProps.scene,
-        headerMode
-      );
+      floatingHeader = this._renderHeader(topVisibleScene, headerMode);
     }
-    const { scenes } = this.props;
 
     const containerStyle = [
       styles.container,
       this._getTransitionConfig().containerStyle,
     ];
 
+    const { screenInterpolator } = this._getTransitionConfig(
+      topVisibleScene.route.animateFromBottom
+    );
+    let flipAnimationStyle = {};
+    if (isFlipTransition) {
+      flipAnimationStyle =
+        screenInterpolator && screenInterpolator({ ...this.props });
+    }
+
     return (
-      <View style={containerStyle}>
+      <Animated.View style={[containerStyle, flipAnimationStyle]}>
         <View style={styles.scenes}>
-          {scenes.map(s => this._renderCard(s))}
+          {nonPurgedScenes.map((s: *, idx) => {
+            const isTopScene = s.key === scene.key;
+            const isTopVisibleScene = s.key === topVisibleScene.key;
+            const shouldHide = isHideTopScene && isTopScene;
+            return this._renderCard(s, {
+              isTransitioning,
+              isFlipTransition,
+              shouldHide,
+            });
+          })}
         </View>
         {floatingHeader}
-      </View>
+      </Animated.View>
     );
   }
 
@@ -259,6 +299,42 @@ class CardStack extends React.Component<Props, State> {
         {this._renderInnerScene(SceneComponent, scene)}
       </Card>
     );
+  };
+}
+
+function processFlipAnimation(
+  scene,
+  scenes,
+  isFlipTransition,
+  isFlipFrom,
+  isFlipTo
+) {
+  let nonPurgedScenes = scenes;
+  let topVisibleScene = _.last(scenes);
+
+  let isHideTopScene = false;
+  if (isFlipTransition) {
+    if (isFlipFrom) {
+      // If flip from animation in progress, the top visible scene is actually
+      // the previous route
+      topVisibleScene = _.last(nonPurgedScenes.slice(0, -1));
+      isHideTopScene = true;
+    } else if (isFlipTo) {
+      // Don't draw stale scenes after flip completes, ran into issue where
+      // portal blue on bottom would draw behind bottom of flip and looked
+      // weird
+      nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
+    }
+  }
+  // Never draw purged scenes, stale routes are purged once animation
+  // completes TODO actually purge these from redux instead, after animation
+  // looks good
+  nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isPurged);
+
+  return {
+    topVisibleScene,
+    isHideTopScene,
+    nonPurgedScenes,
   };
 }
 
