@@ -43,6 +43,18 @@ type Props = {
   scenes: Array<NavigationScene>,
   scene: NavigationScene,
   index: number,
+  position: number,
+  // True if FLIP_FORWARD or FLIP_BACKWARD and in progress
+  isFlipTransition: boolean,
+  // True during first half of a flip
+  isFlipFrom: boolean,
+  // True during second half of a flip
+  isFlipTo: boolean,
+  // True when animation is in progress
+  isTransitioning: boolean,
+  statusBarSize: number,
+  openDrawer: Function,
+  handleBackAction: Function,
 };
 
 type State = {
