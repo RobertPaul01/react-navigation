@@ -64,7 +64,6 @@ class CardStackTransitioner extends React.Component<Props, State> {
       animation = () => ({
         timing: Animated.timing,
         duration: 0,
-        useNativeDriver: true,
       });
     }
 
@@ -119,8 +118,16 @@ class CardStackTransitioner extends React.Component<Props, State> {
       // Native animation support also depends on the transforms used:
       CardStackStyleInterpolator.canUseNativeDriver()
     ) {
+      // TODO setting useNativeDriver to false as a workaround.
+      // Problem: Page freezes/doesn't respond to touch events when animations
+      // swap between Card and CardStack now that the container view of
+      // CardStack is an Animated.View (so it can do the flip transition)
+      // Example 1 - Login in as SSO clicking a portal tile, logout, try to interact with Login page
+      // Example 2 - Go to forgot password and back from Login, try to interact with Login page
+      // Every time I get 1 to work, 2 breaks, and vice versa. Setting this to false solves both
+
       // Internal undocumented prop
-      transitionSpec.useNativeDriver = true;
+      transitionSpec.useNativeDriver = false;
     }
     return transitionSpec;
   };
