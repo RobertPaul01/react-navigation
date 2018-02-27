@@ -14,7 +14,8 @@ class Card extends React.Component {
     const { children, pointerEvents, style, scene } = this.props;
     const isTopScreen = scene.isActive;
     const modals = this.props.modals;
-    const isAccessible = (isTopScreen) && (_.size(modals) === 0 || modals === undefined);
+    const isAccessible =
+      isTopScreen && (_.size(modals) === 0 || modals === undefined);
     return (
       <Animated.View
         pointerEvents={pointerEvents}
