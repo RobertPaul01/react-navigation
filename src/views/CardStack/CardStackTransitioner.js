@@ -127,7 +127,7 @@ class CardStackTransitioner extends React.Component<Props, State> {
       // Every time I get 1 to work, 2 breaks, and vice versa. Setting this to false solves both
 
       // Internal undocumented prop
-      transitionSpec.useNativeDriver = true;
+      transitionSpec.useNativeDriver = false;
     }
     return transitionSpec;
   };
