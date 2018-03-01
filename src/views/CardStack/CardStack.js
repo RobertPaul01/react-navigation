@@ -115,6 +115,7 @@ class CardStack extends React.Component<Props, State> {
         onNavigateBack={this.props.handleBackAction}
         scene={scene}
         mode={headerMode}
+        isFlipTransition={this.props.isFlipTransition}
       />
     );
   }
