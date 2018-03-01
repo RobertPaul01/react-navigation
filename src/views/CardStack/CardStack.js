@@ -561,9 +561,7 @@ function processFlipAnimation(
       nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
     }
   }
-  // Never draw purged scenes, stale routes are purged once animation
-  // completes TODO actually purge these from redux instead, after animation
-  // looks good
+
   nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isPurged);
 
   return {
