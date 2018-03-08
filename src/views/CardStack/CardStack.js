@@ -169,7 +169,10 @@ class CardStack extends React.Component<Props, State> {
           {nonPurgedScenes.map((s: *, idx) => {
             const isTopScene = s.key === scene.key;
             const isTopVisibleScene = s.key === topVisibleScene.key;
-            const shouldHide = isHideTopScene && isTopScene;
+            const shouldHideFlipTo = isHideTopScene && isTopScene;
+            const shouldHideFlipFrom =
+              !isHideTopScene && isFlipTransition && !isTopScene;
+            const shouldHide = shouldHideFlipTo || shouldHideFlipFrom;
             return this._renderCard(s, {
               isFlipTransition,
               shouldHide,
@@ -338,7 +341,7 @@ function processFlipAnimation(
       // Don't draw stale scenes after flip completes, ran into issue where
       // portal blue on bottom would draw behind bottom of flip and looked
       // weird
-      nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
+      // nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
     }
   }
 
