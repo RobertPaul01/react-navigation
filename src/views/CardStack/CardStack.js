@@ -169,10 +169,10 @@ class CardStack extends React.Component<Props, State> {
           {nonPurgedScenes.map((s: *, idx) => {
             const isTopScene = s.key === scene.key;
             const isTopVisibleScene = s.key === topVisibleScene.key;
-            const shouldHideFlipTo = isHideTopScene && isTopScene;
-            const shouldHideFlipFrom =
-              !isHideTopScene && isFlipTransition && !isTopScene;
-            const shouldHide = shouldHideFlipTo || shouldHideFlipFrom;
+            const shouldHideFlipToScene = isHideTopScene && isTopScene;
+            const shouldHideFlipFromScene =
+              !isHideTopScene && !isTopScene && isFlipTransition;
+            const shouldHide = shouldHideFlipToScene || shouldHideFlipFromScene;
             return this._renderCard(s, {
               isFlipTransition,
               shouldHide,
