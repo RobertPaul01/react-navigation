@@ -558,7 +558,7 @@ function processFlipAnimation(
       // Don't draw stale scenes after flip completes, ran into issue where
       // portal blue on bottom would draw behind bottom of flip and looked
       // weird
-      nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
+      // nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
     }
   }
 
