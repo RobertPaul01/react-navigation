@@ -554,11 +554,6 @@ function processFlipAnimation(
       // the previous route
       topVisibleScene = _.last(nonPurgedScenes.slice(0, -1));
       isHideTopScene = true;
-    } else if (isFlipTo) {
-      // Don't draw stale scenes after flip completes, ran into issue where
-      // portal blue on bottom would draw behind bottom of flip and looked
-      // weird
-      // nonPurgedScenes = nonPurgedScenes.filter(scene => !scene.route.isStale);
     }
   }
 
