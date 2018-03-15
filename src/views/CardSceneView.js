@@ -45,7 +45,8 @@ export default class SceneView extends React.PureComponent<Props> {
         routeKey={scene.route.key}
         handleNavigate={this.props.handleNavigate}
         trackPage={data => this._trackState(scene.route, data)}
-        handleBack={this.props.handleBackAction}
+        isLeftSplitPaneComponent={this.props.isLeftSplitPaneComponent}
+        handleBack={this.props.handleBack}
         isActiveRoute={isActiveRoute}
         isTopScreen={scene.isActive}
       />
