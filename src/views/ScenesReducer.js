@@ -59,16 +59,6 @@ function areRoutesShallowEqual(one, two) {
   return shallowEqual(one, two);
 }
 
-export function reduxToComponentStateHelper(nextState: NavigationState) {
-  return nextState.routes.map((route, index) => ({
-    index,
-    isActive: index === nextState.routes.length - 1,
-    isStale: false,
-    key: SCENE_KEY_PREFIX + route.key,
-    route,
-  }));
-}
-
 export default function ScenesReducer(
   scenes: Array<NavigationScene>,
   nextState: NavigationState,

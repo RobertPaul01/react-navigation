@@ -6,9 +6,7 @@ import _ from 'lodash';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import invariant from '../utils/invariant';
 
-import NavigationScenesReducer, {
-  reduxToComponentStateHelper,
-} from './ScenesReducer';
+import NavigationScenesReducer from './ScenesReducer';
 
 import type {
   NavigationLayout,
@@ -31,9 +29,6 @@ type Props = {
     transitionProps: NavigationTransitionProps,
     prevTransitionProps: ?NavigationTransitionProps
   ) => React.Node,
-  onFlipStart: Function,
-  onFlipFromComplete: Function,
-  onFlipToComplete: Function,
 };
 
 type State = {
@@ -98,57 +93,24 @@ class Transitioner extends React.Component {
       this.props.navigation.state
     );
 
-    const noSceneChange = nextScenes === this.state.scenes;
-    if (noSceneChange) {
+    if (nextScenes === this.state.scenes) {
       return;
     }
 
-    const nextKey = _.last(nextProps.navigation.state.routes).key;
-    const thisKey = _.last(this.props.navigation.state.routes).key;
-    const keyHasChanged = nextKey !== thisKey;
     const indexHasChanged =
       nextProps.navigation.state.index !== this.props.navigation.state.index;
-
-    const noViewableSceneChange = indexHasChanged && !keyHasChanged;
-
-    if (noViewableSceneChange) {
-      // Remove from the stack without breaking animations or causing unwanted
-      // animation. Transitioner maintains them in component state and must
-      // mirror what is passed from react store
-
-      const nextScenes = reduxToComponentStateHelper(
-        nextProps.navigation.state
-      );
-      this.setState({
-        scenes: nextScenes,
-      });
-
-      return;
-    }
-
     if (this._isTransitionRunning) {
-      this._queuedTransition = {
-        nextProps,
-        nextScenes,
-        indexHasChanged,
-        keyHasChanged,
-      };
+      this._queuedTransition = { nextProps, nextScenes, indexHasChanged };
       return;
     }
 
-    this._startTransition(
-      nextProps,
-      nextScenes,
-      indexHasChanged,
-      keyHasChanged
-    );
+    this._startTransition(nextProps, nextScenes, indexHasChanged);
   }
 
   _startTransition(
     nextProps: Props,
     nextScenes: Array<NavigationScene>,
-    indexHasChanged: boolean,
-    keyHasChanged: boolean
+    indexHasChanged: boolean
   ) {
     const nextState = {
       ...this.state,
@@ -178,27 +140,22 @@ class Transitioner extends React.Component {
     const { timing } = transitionSpec;
     delete transitionSpec.timing;
 
-    let positionHasChanged;
-    if (keyHasChanged) {
-      positionHasChanged = true;
-    } else if (indexHasChanged) {
-      const toValue = nextProps.navigation.state.index;
-      positionHasChanged = position.__getValue() !== toValue;
-    }
+    const toValue = nextProps.navigation.state.index;
+    const positionHasChanged = position.__getValue() !== toValue;
 
     // update scenes and play the transition
     this._isTransitionRunning = true;
     this.setState(nextState, async () => {
-      if (nextProps.onTransitionStart) {
-        const result = nextProps.onTransitionStart(
-          this._transitionProps,
-          this._prevTransitionProps
-        );
-
-        if (result instanceof Promise) {
-          await result;
-        }
-      }
+      // if (nextProps.onTransitionStart) {
+      //   const result = nextProps.onTransitionStart(
+      //     this._transitionProps,
+      //     this._prevTransitionProps
+      //   );
+      //
+      //   if (result instanceof Promise) {
+      //     await result;
+      //   }
+      // }
       if (this.props.isFlipTransition) {
         const { flipFromAnimation, flipToAnimation } = getFlipAnimations(
           indexHasChanged,
