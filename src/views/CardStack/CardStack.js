@@ -80,7 +80,7 @@ class CardStack extends React.Component<Props, State> {
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.statusBarSize !== this.props.statusBarSize) {
       this.setState({
-        headerHeight: (this.props.isIOS ? 45 : 41) + this.props.statusBarSize,
+        headerHeight: (this.props.isIOS ? 45 : 41) + nextProps.statusBarSize,
       });
     }
 
