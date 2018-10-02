@@ -106,6 +106,13 @@ class CardStack extends React.Component<Props, State> {
     const accessibilityOption = this.props.hasModal
       ? 'no-hide-descendants'
       : 'yes';
+
+    const config = this._getTransitionConfig();
+    let transitionAnimation = null;
+    if (config && config.screenInterpolator) {
+      transitionAnimation = screenInterpolator({ ...this.props, scene })
+    }
+
     return (
       // $FlowFixMeRN0.51.1
       <this.props.headerComponent
@@ -115,7 +122,7 @@ class CardStack extends React.Component<Props, State> {
         onNavigateBack={this.props.handleBackAction}
         scene={scene}
         mode={headerMode}
-        transitionAnimation={this._getTransitionConfig().screenInterpolator({ ...this.props, scene })}
+        transitionAnimation={transitionAnimation}
         isFlipTransition={this.props.isFlipTransition}
       />
     );
