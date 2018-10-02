@@ -110,7 +110,7 @@ class CardStack extends React.Component<Props, State> {
     const config = this._getTransitionConfig();
     let transitionAnimation = null;
     if (config && config.screenInterpolator) {
-      transitionAnimation = screenInterpolator({ ...this.props, scene })
+      transitionAnimation = config.screenInterpolator({ ...this.props, scene })
     }
 
     return (
