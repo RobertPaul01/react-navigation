@@ -120,8 +120,8 @@ class CardStack extends React.Component<Props, State> {
     const accessibilityOption = this.props.hasModal
       ? 'no-hide-descendants'
       : 'yes';
-    const config = this._getTransitionConfig();
 
+    const config = this._getTransitionConfig();
     let transitionAnimation = null;
     if (config && config.screenInterpolator) {
       transitionAnimation = screenInterpolator({ ...this.props, scene })
